@@ -61,6 +61,13 @@
                                 <span class="title">Favourites</span>
                             </a>
                     </li>
+                    <li <?php if($this->uri->segment(2) == 'user_list'){ ?>class="active"
+                        <?php } ?>>
+                            <a href="<?php echo site_url('admin/user_list'); ?>">
+                                <i class="fa fa-list"></i>
+                                <span class="title">User Management</span>
+                            </a>
+                    </li>
                     
                     
   

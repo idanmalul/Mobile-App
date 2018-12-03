@@ -70,6 +70,11 @@ function googleTranslateElementInit() {
 <script src="<?php echo base_url() ?>assets/js/multiselect/js/jquery.multi-select.js"></script>
 <!--<script src="<?php echo base_url() ?>assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js" integrity="sha256-eZNgBgutLI47rKzpfUji/dD9t6LRs2gI3YqXKdoDOmo=" crossorigin="anonymous"></script>
+
+<!-- filter for datatables js  -->
+<script src="<?php echo base_url() ?>assets/js/datatables/yadcf/jquery.dataTables.yadcf.js"></script>
+<script src="<?php echo base_url() ?>assets/js/datatables/tabletools/dataTables.tableTools.min.js"></script>
+<!-- end -->
 </head>
 <!-- Page Loading Overlay -->
 <!--<div class="page-loading-overlay">

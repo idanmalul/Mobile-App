@@ -105,6 +105,15 @@ class Admin extends CI_Controller {
         }
     }
     
+     function user_list()
+    {
+        $data['user_list'] = $this->project_model->get_column_data_where('users', '', $where='');
+        $this->load->view('admin/header');
+        $this->load->view('admin/menu');
+        $this->load->view('admin/listing/user_list_view', $data);
+        $this->load->view('admin/footer');
+    }
+    
     function logout() {
 
         $array_items = array('admin_id', 'admin_email', 'logged_in');

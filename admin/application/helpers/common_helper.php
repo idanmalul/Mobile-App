@@ -56,4 +56,26 @@ function removeFromString($str, $item) {
     return implode(',', $parts);
 }
 
+if(!function_exists('active_favorite_list'))
+{
+    function active_favorite_list($favourite_id=0)
+    {
+
+        $CI = & get_instance();
+        if($CI->session->userdata('logged_in'))
+        {
+            $where = array('favourite_id' => $favourite_id);
+
+            $favouriteData = $CI->project_model->get_column_data_where('favourites', '', $where);
+
+            return $favouriteData;
+
+        }
+        else 
+        {
+
+        }
+    }   
+}
+
 ?>
