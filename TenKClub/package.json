@@ -1,0 +1,32 @@
+{
+  "name": "TenKClub",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "react": "16.6.1",
+    "react-native": "0.57.5",
+    "react-native-cookie": "^0.2.0",
+    "react-native-instagram-login": "^1.0.8",
+    "react-native-iphone-x-helper": "^1.2.0",
+    "react-native-keyboard-aware-scroll-view": "^0.7.4",
+    "react-native-keyboard-aware-scrollview": "^2.0.0",
+    "react-native-linear-gradient": "^2.5.2",
+    "react-native-material-dropdown": "^0.11.1",
+    "react-native-selectmultiple-button": "^0.1.105",
+    "react-native-video": "^4.2.0",
+    "react-navigation": "^2.18.2"
+  },
+  "devDependencies": {
+    "babel-jest": "23.6.0",
+    "jest": "23.6.0",
+    "metro-react-native-babel-preset": "0.49.1",
+    "react-test-renderer": "16.6.1"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
