@@ -1,7 +1,9 @@
 const images = {
 
 	//------icons------// 
+	settings: require('../images/icons/settings.png'),
 	close: require('../images/icons/close.png'),
+	//chevron_right : require('../images/icons/chevron-right@3x.png'),
 
 	//------Backgound images------//
 	splash: require('../images/splash.png'),

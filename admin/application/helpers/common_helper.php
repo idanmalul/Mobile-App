@@ -78,4 +78,115 @@ if(!function_exists('active_favorite_list'))
     }   
 }
 
+if(!function_exists('get_all_users'))
+{
+    function get_all_users($user_id=0)
+    {
+
+        $CI = & get_instance();
+        if($CI->session->userdata('logged_in'))
+        {
+            $where = array('is_profile_updated' => 1);
+
+            $users = $CI->project_model->get_column_data_where('users', '', $where);
+
+            return $users;
+
+        }
+        else 
+        {
+
+        }
+    }   
+}
+
+if(!function_exists('get_users_by_story_id'))
+{
+    function get_users_by_story_id($story_id=0)
+    {
+
+        $CI = & get_instance();
+        if($CI->session->userdata('logged_in'))
+        {
+            $where = array('is_profile_updated' => 1);
+//            $query = "SELECT s.* FROM story s INNER JOIN story_user su ON su.story_id=s.id WHERE su.user_id='$user_id'";
+            $query = "SELECT u.user_id,u.full_name FROM story s INNER JOIN story_user su ON su.story_id=s.id INNER JOIN users u ON u.user_id=su.user_id WHERE su.story_id='$story_id'";
+            
+            $users = $CI->project_model->get_query_result($query);
+           // print_r($users);die();
+//            $users = $CI->project_model->get_column_data_where('users', '', $where);
+
+            return $users;
+
+        }
+        else 
+        {
+
+        }
+    }   
+}
+
+if(!function_exists('get_all_stories'))
+{
+    function get_all_stories()
+    {
+
+        $CI = & get_instance();
+        if($CI->session->userdata('logged_in'))
+        {
+//          $where = array('story_status' => 2);
+            $stories = $CI->project_model->get_column_data_where('story', '', $where='');
+
+            return $stories;
+
+        }
+        else 
+        {
+
+        }
+    }   
+}
+
+if(!function_exists('get_user_by_user_id'))
+{
+    function get_user_by_user_id($id = 0)
+    {
+
+        $CI = & get_instance();
+        if($CI->session->userdata('logged_in'))
+        {
+            $where = array('user_id' => $id);
+            $user = $CI->project_model->get_column_data_where('users', '', $where);
+
+            return $user[0];
+
+        }
+        else 
+        {
+
+        }
+    }   
+}
+
+if(!function_exists('get_story_by_story_id'))
+{
+    function get_story_by_story_id($id = 0)
+    {
+
+        $CI = & get_instance();
+        if($CI->session->userdata('logged_in'))
+        {
+            $where = array('id' => $id);
+            $story = $CI->project_model->get_column_data_where('story', '', $where);
+
+            return $story[0];
+
+        }
+        else 
+        {
+
+        }
+    }   
+}
+
 ?>

@@ -17,7 +17,9 @@ import {
   Alert,
   ImageBackground,
   BackHandler,
+  I18nManager
 } from "react-native";
+I18nManager.forceRTL(true); 
 import { Images, Colors } from "../themes";
 import { getEventList } from "../constants/apis";
 import Spinner from "../components/Spinner";
@@ -26,8 +28,16 @@ import Video from 'react-native-video';
 const { height, width } = Dimensions.get("window");
 const aspectRatio = height / width;
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import LinearGradient from "react-native-linear-gradient";
+export default class storyList extends Component {
 
-export default class Profile extends Component {
+  static navigationOptions = { 
+    title: '',  // Main
+    tabBarIcon: ({ focused, tintColor }) => {
+     
+      return <Image style={[styles.icon, { tintColor: tintColor }]} source={require('../images/icons/icon-4.png')}/>;
+    },
+};
   constructor(props) {
     super(props);
     this.state = {
@@ -37,12 +47,13 @@ export default class Profile extends Component {
     
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     
-    this.getStoryList();
+    
         
   }
   
   getStoryList = ()=>{
-
+    this.setState({ isLoading: true });
+    // return false;
     AsyncStorage.multiGet(['username', 'password', 'user_id']).then((data) => {
       let username = data[0][1];
       let password = data[1][1];
@@ -68,14 +79,28 @@ export default class Profile extends Component {
     
     .then((res) => {
       if(res.status === 'true'){
+        this.setState({ isLoading: false });
         this.setState({
           defaulterArray:res.response
         });
         
       }
       else {
+        this.setState({ isLoading: false });
         // alert('Something went wrong. Please try again.',res.message);
-        alert('No event available!');
+        // alert('No event available!');
+        setTimeout(() => {
+          Alert.alert(
+              'Alert',
+              'No event available!',
+              [
+               // {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+              //  {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'OK', onPress: () => this.setState({ isLoading: false })},
+              ],
+              { cancelable: false }
+            )
+        }, 100);
       }
     
     
@@ -89,6 +114,7 @@ export default class Profile extends Component {
 
   //------exit app start------//
   componentWillMount() {
+    this.getStoryList();
     BackHandler.addEventListener(
       "hardwareBackPress",
       this.handleBackButtonClick
@@ -101,7 +127,9 @@ export default class Profile extends Component {
     );
   }
   handleBackButtonClick() {
-    this.props.navigation.navigate("Profile"); 
+    this.props.navigation.goBack();
+    // this.props.navigation.navigate("Tabs"); 
+    // this.props.navigation.navigate("Profile"); 
     return true;
   /*  AsyncStorage.multiGet(['username', 'password']).then((data) => {
       let username = data[0][1];
@@ -129,20 +157,20 @@ export default class Profile extends Component {
     return (
       
       <ImageBackground source={Images.screen_4}  resizeMode="stretch" style={styles.container}>
+      <View style={{flexDirection:'row-reverse',marginLeft: 15}}>
+      <TouchableOpacity 
+                        onPress={() => this.props.navigation.navigate("Profile")}>
+                        <Image source={Images.settings} style={styles.headerIcon} />
+                    </TouchableOpacity> 
+      </View>
       <View>
 
-        {/* <LinearGradient
-          start={{ x: 0.5, y: 0.25 }}
-          end={{ x: 0.5, y: 1.0 }}
-          colors={[Colors.mainColor, Colors.colorStatusBar]}
-          style={styles.headerView}
-        >
-          
-          <Text style={styles.headerTitle}>Story</Text>
-          
-        </LinearGradient> */}
+      
         <View style={{marginTop:0}}>
-                            <Text style={styles.headerTitle}>The Upcoming Events</Text>
+                            <Text style={styles.headerTitle}>
+                            {/* The Upcoming Events */}
+                            הארועים הקרובים
+                            </Text>
                             </View>
       </View>
       <ScrollView>
@@ -219,11 +247,12 @@ export default class Profile extends Component {
                             }
                         </View>
                     </View>
-                </ScrollView>
-                {
+                    {
                     this.state.isLoading &&
                     <Spinner />
                 }
+                </ScrollView>
+                
       
       </ImageBackground>
       
@@ -261,8 +290,8 @@ const styles = StyleSheet.create({
     fontSize: Platform.OS === "ios" ? (aspectRatio > 1.6 ? 16 : 18) : 18,
     color: Colors.colorWhite,
     fontWeight: "bold",
-    fontFamily: "Arimo",
-    marginTop: 30,
+    // fontFamily: "Arimo",
+    marginTop: 5,
     // alignItems: "center",
     textAlign: 'center',
     padding:10
@@ -290,4 +319,17 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
   },
+  icon: {
+    width: 28,
+    height: 28,
+  },
+  headerIcon: {
+    
+    textAlign : 'left',
+    marginLeft: 15,
+    width: (Platform.OS === 'ios') ? (aspectRatio > 1.6) ? 32: 28 : 28,
+    height: (Platform.OS === 'ios') ? (aspectRatio > 1.6) ? 32 : 28 : 28,
+    borderRadius: (Platform.OS === 'ios') ? (aspectRatio > 1.6) ? 16 : 28 : 28,
+    marginTop: 40
+},
 });

@@ -21,8 +21,10 @@
 	<link rel="stylesheet" href="<?php echo base_url() ?>assets/css/xenon-components.css">
 	<link rel="stylesheet" href="<?php echo base_url() ?>assets/css/xenon-skins.css">
 	<link rel="stylesheet" href="<?php echo base_url() ?>assets/css/custom.css">
-        
-        <link rel="stylesheet" href="<?php echo base_url() ?>assets/js/multiselect/css/multi-select.css">
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/select2/select2.css">
+	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/select2/select2-bootstrap.css">
+	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/multiselect/css/multi-select.css">
+        <!--<link rel="stylesheet" href="<?php echo base_url() ?>assets/js/multiselect/css/multi-select.css">-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" integrity="sha256-rDWX6XrmRttWyVBePhmrpHnnZ1EPmM6WQRQl6h0h7J8=" crossorigin="anonymous" />
 
 	<script src="<?php echo base_url() ?>assets/js/jquery-1.11.1.min.js"></script>
@@ -67,6 +69,7 @@ function googleTranslateElementInit() {
 <script src="<?php echo base_url() ?>assets/js/combodate.js"></script>
 <script src="<?php echo base_url() ?>assets/js/colorpicker/bootstrap-colorpicker.min.js"></script>
 <script src="<?php echo base_url() ?>assets/js/formwizard/jquery.bootstrap.wizard.min.js"></script>
+<script src="<?php echo base_url() ?>assets/js/select2/select2.min.js"></script>
 <script src="<?php echo base_url() ?>assets/js/multiselect/js/jquery.multi-select.js"></script>
 <!--<script src="<?php echo base_url() ?>assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js" integrity="sha256-eZNgBgutLI47rKzpfUji/dD9t6LRs2gI3YqXKdoDOmo=" crossorigin="anonymous"></script>
@@ -74,6 +77,20 @@ function googleTranslateElementInit() {
 <!-- filter for datatables js  -->
 <script src="<?php echo base_url() ?>assets/js/datatables/yadcf/jquery.dataTables.yadcf.js"></script>
 <script src="<?php echo base_url() ?>assets/js/datatables/tabletools/dataTables.tableTools.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($)
+{
+        $("#send_user_id").select2({
+                placeholder: 'Choose your users',
+                allowClear: true
+        }).on('select2-open', function()
+        {
+                // Adding Custom Scrollbar
+                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+        });
+
+});
+</script>
 <!-- end -->
 </head>
 <!-- Page Loading Overlay -->

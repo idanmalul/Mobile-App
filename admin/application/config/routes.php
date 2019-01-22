@@ -58,3 +58,5 @@ $route['logout'] = 'admin/logout';
 $route['change-password'] = 'admin/change_pass';
 $route['change-status'] = 'admin/change_status';
 $route['users'] = 'admin/user_list';
+$route['story_list'] = 'admin/story_list';
+$route['history'] = 'admin/post_story_list';

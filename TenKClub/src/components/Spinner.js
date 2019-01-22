@@ -20,13 +20,14 @@ export default class Spinner extends Component {
                     transparent={true}
                     supportedOrientations={['portrait', 'landscape']}
                     visible={this.state.isLoading}
-                    onRequestClose={() => console.log('')}>
+                    onRequestClose={() => {this.setState({ isLoading: false })}}>
                     <View style={styles.mainView}>
                         <View style={styles.childView}>
                             <ActivityIndicator
                                 style={styles.ActivityIndicator}
                                 color={Colors.orangeColor}
                                 size='large'
+                                animating={this.state.isLoading}
                             />
                             <Text style={styles.loadingText}>Please Wait...</Text>
                         </View>

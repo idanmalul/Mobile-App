@@ -69,8 +69,20 @@
                             </a>
                     </li>
                     
-                    
-  
+                    <li <?php if($this->uri->segment(1) == 'story_list'){ ?>class="active"
+                        <?php } ?>>
+                            <a href="<?php echo site_url('story_list'); ?>">
+                                <i class="fa fa-list"></i>
+                                <span class="title">Story List</span>
+                            </a>
+                    </li>
+                    <li <?php if($this->uri->segment(1) == 'history'){ ?>class="active"
+                        <?php } ?>>
+                            <a href="<?php echo site_url('history'); ?>">
+                                <i class="fa fa-history"></i>
+                                <span class="title">Story History</span>
+                            </a>
+                    </li>
 
                 </ul>
 

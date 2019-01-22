@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 const ios_blue = "#43cea2";
 const themeColor = '#0D1014'
+import ReactTimeout from 'react-timeout';
 
 let multipleData = [];
 import _ from "lodash";
@@ -20,9 +21,12 @@ import {
   KeyboardAvoidingView,
   ImageBackground,
   BackHandler,
-  Modal
+  Modal,
+  Image,
+  I18nManager
  // BVLinearGradient
 } from "react-native";
+I18nManager.forceRTL(true); 
 import { Images, Colors } from "../themes";
 import { getUserProfile, updateUserProfile } from "../constants/apis";
 import LinearGradient from "react-native-linear-gradient";
@@ -33,19 +37,30 @@ import { SelectMultipleButton, SelectMultipleGroupButton } from 'react-native-se
 const { height, width } = Dimensions.get("window");
 const aspectRatio = height / width;
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
+const isRTL = I18nManager.isRTL;
 export default class Profile extends Component {
+
+  
+  static navigationOptions = {
+    title: '',  // Search
+    tabBarIcon: ({ focused, tintColor }) => {
+     
+      return <Image style={[styles.icon, { tintColor: tintColor }]} source={require('../images/icons/icon-3.png')}/>; 
+    },
+};
+
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false,
+      showPopup: false,
+      isLoading: true,
       firstName: "",
       lastName: "",
       userID: "",
       Email: "",
       eventType: "",
       Age:"",
-      genderLabel:"Gender",
+      genderLabel:"מין",
       genderArray: [{
         "label": "Male",
         value: 1,
@@ -53,7 +68,7 @@ export default class Profile extends Component {
       "label": "Female",
       value: 2,
   },{
-    "label": "Not Specified",
+    "label": "Other", 
     value: 3,
 }],
       multipleSelectedData: [],
@@ -66,7 +81,7 @@ export default class Profile extends Component {
     this.onChangeText = this.onChangeText.bind(this);
     this.eventTypeRef = this.updateRef.bind(this, 'eventType');
 
-        this.getUserDetail();
+        
         
   }
   //---picker---/
@@ -90,8 +105,11 @@ updateRef(name, ref) {
       let username = data[0][1];
       let password = data[1][1];
       let formBody = "username="+username;
+      // setTimeout(() => {
+      //   this.setState({ isLoading: false });
+      // }, 10000);
       if (username !== null && username !== ''){
-          fetch(
+      fetch(
             // 'http://192.168.1.23/10k-club/webservices/get_user_profile.php',
             // 'http://10k.tempurl.co.il/webservices/get_user_profile.php',
             getUserProfile,
@@ -128,6 +146,7 @@ updateRef(name, ref) {
           this._singleTapMultipleSelectedButtons(res.user_details.favourites[i]);
           // multipleData.push(res.favourites[i].favourite_name);
         }
+        
         this.setState({ 
           profileData: res.user_details,
           FavouritesData: res.favourites,
@@ -140,10 +159,12 @@ updateRef(name, ref) {
           eventType : genderText
           
         });
+        this.setState({ isLoading: false });
         // this._singleTapMultipleSelectedButtons(res.user_details.favourites);
         //this.setState.multipleSelectedData.includes(res.user_details.favourites);
       }
       else {
+        this.setState({ isLoading: false });
         alert('test test not work',res.message);
       }
     
@@ -159,7 +180,8 @@ updateRef(name, ref) {
 
   async doProfileUpdate() {
     
-    this.setState({ isLoading: false });
+    this.setState({ isLoading: true });
+    // let fcmToken = await AsyncStorage.getItem('fcmToken');
     let details = {
       
       first_name: this.state.firstName,
@@ -181,9 +203,9 @@ updateRef(name, ref) {
     }
     formBody = formBody.join("&");
     console.log(formBody, "--------");
-    setTimeout(() => {
-      this.setState({ isLoading: false });
-    }, 15000);
+    // setTimeout(() => {
+    //   this.setState({ isLoading: false });
+    // }, 10000);
     await fetch(
       // "http://192.168.1.23/10k-club/webservices/edit_user_profile.php/",
       // 'http://10k.tempurl.co.il/webservices/edit_user_profile.php',
@@ -199,8 +221,9 @@ updateRef(name, ref) {
     )
       .then(response => response.json())
       .then(responseData => {
-        this.props.navigation.navigate("storyList");
         this.setState({ isLoading: false });
+        this.props.navigation.navigate("storyList");
+        
       })
       .catch(error => {
         this.setState({ isLoading: false });
@@ -210,6 +233,8 @@ updateRef(name, ref) {
   
   //------exit app start------//
   componentWillMount() {
+    //alert(isRTL);
+    this.getUserDetail();
     BackHandler.addEventListener(
       "hardwareBackPress",
       this.handleBackButtonClick
@@ -292,8 +317,13 @@ updateRef(name, ref) {
           style={styles.headerView}
         >
           
-          <Text style={styles.headerTitle}>Personal Information</Text>
-          
+          {/* <Text style={styles.headerTitle}>Personal Information</Text> */}
+          <Text style={styles.headerTitle}>פרטים אישיים</Text>
+          <TouchableOpacity
+                        onPress={() => this.props.navigation.goBack()}
+                        style={{ position: 'absolute', right: 10, }}>
+                        <Image style={styles.headerIconRight} />
+                    </TouchableOpacity>
         </LinearGradient>
       </View>
       <ScrollView>
@@ -346,7 +376,7 @@ updateRef(name, ref) {
                       <View style={styles.inoutView}>
                         <TextInput
                           style={styles.input}
-                          placeholder="First Name"
+                          placeholder="שם פרטי"
                           placeholderTextColor="#fff" 
                           keyboardType="default"
                           underlineColorAndroid="transparent"
@@ -368,7 +398,7 @@ updateRef(name, ref) {
                       <View style={styles.inoutView}>
                         <TextInput
                           style={styles.input}
-                          placeholder="Last Name"
+                          placeholder="שם משפחה"
                           placeholderTextColor="#fff" 
                           keyboardType="default"
                           underlineColorAndroid="transparent"
@@ -389,7 +419,7 @@ updateRef(name, ref) {
                       <View style={styles.inoutView}>
                         <TextInput
                           style={styles.input}
-                          placeholder="ID"
+                          placeholder="תעודת זהות"
                           placeholderTextColor="#fff" 
                           keyboardType="default"
                           underlineColorAndroid="transparent"
@@ -416,7 +446,7 @@ updateRef(name, ref) {
                       <View style={styles.inoutView}>
                         <TextInput
                           style={styles.input}
-                          placeholder="Email"
+                          placeholder="דואר אלקטרוני"
                           placeholderTextColor="#fff" 
                           keyboardType="email-address"
                           underlineColorAndroid="transparent"
@@ -468,7 +498,7 @@ updateRef(name, ref) {
                       }}>
                         <TextInput
                           style={styles.input}
-                          placeholder="Age"
+                          placeholder="גיל"
                           placeholderTextColor="#fff" 
                           maxLength={10}
                           keyboardType="number-pad"
@@ -481,7 +511,12 @@ updateRef(name, ref) {
                     </View>
 
                     
-                    <View style={styles.inputMain}>
+                    <View style={{
+    marginTop: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    color:"#fff"
+  }}>
                       <View
                         style={{
                           flex: 0.3,
@@ -490,7 +525,8 @@ updateRef(name, ref) {
                         }}
                       >
                         <Text style={styles.lableText}>
-                          Favourites
+                          {/* Favourites */}
+                          העדפות
                           <Text style={styles.starText}></Text>
                         </Text>
                       </View>
@@ -582,7 +618,8 @@ updateRef(name, ref) {
                           fontWeight: "bold"
                         }}
                       >
-                        Save
+                        {/* Save */}
+                        שמירה
                       </Text>
                     </TouchableOpacity>
                     
@@ -679,10 +716,12 @@ const styles = StyleSheet.create({
     
   },
   input: {
-    marginLeft: 10,
+    // marginLeft: 10,
     fontSize: 15,
     height: 50,
-    color:"#fff"
+    color:"#fff",
+    // flexDirection: isRTL ? "row-reverse" : "row",
+    textAlign: 'right'
   },
   inoutViewMulti: {
     flex: 0.6,
@@ -703,7 +742,7 @@ const styles = StyleSheet.create({
   },
   inputMain: {
     marginTop: 15,
-    flexDirection: "row",
+    flexDirection: isRTL ? "row-reverse" : "row",
     alignItems: "center",
     color:"#fff"
   },
@@ -722,6 +761,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: Platform.OS === "ios" ? (aspectRatio > 1.6 ? 14 : 16) : 18,
     color: Colors.orangeColor
+  },
+  icon: {
+    width: 28,
+    height: 28,
   },
   
 });

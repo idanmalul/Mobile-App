@@ -12,3 +12,6 @@ export const updateUserProfile = baseUrl + 'edit_user_profile.php'
 //---Up coming events ---//
 export const getEventList = baseUrl + 'get_story_list.php'
 export const uploadEvent = baseUrl + 'second.php'
+
+//---My Events ---//
+export const myEventList = baseUrl + 'get_my_event_list.php'

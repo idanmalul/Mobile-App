@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">TenKClub</string>
+    <string name="app_name">10K-CLUB</string>
+    <string name="default_notification_channel_id">10K_CHANNEL</string>
 </resources>

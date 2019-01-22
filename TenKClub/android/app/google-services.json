@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "720631775671",
+    "firebase_url": "https://tenkclub-dd01b.firebaseio.com",
+    "project_id": "tenkclub-dd01b",
+    "storage_bucket": "tenkclub-dd01b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720631775671:android:f31e924281743939",
+        "android_client_info": {
+          "package_name": "com.tenkclub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "720631775671-kb0jd481442h91lk6ai4v6jnns1oh00f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDko8t4-XXyeT9y_i05Ek6wlwdUeJqBSps"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

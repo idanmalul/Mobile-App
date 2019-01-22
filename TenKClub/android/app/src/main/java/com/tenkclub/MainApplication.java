@@ -3,6 +3,10 @@ package com.tenkclub;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.invertase.firebase.RNFirebasePackage;
+import com.avishayil.rnrestart.ReactNativeRestartPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import im.shimo.react.cookie.CookieManagerPackage;
@@ -14,6 +18,9 @@ import com.facebook.soloader.SoLoader;
 import java.util.Arrays;
 import java.util.List;
 
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;                       
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -26,8 +33,15 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+           
+            new ReactNativeRestartPackage(),
+            new RNGestureHandlerPackage(),
+            new VectorIconsPackage(),
             new ReactVideoPackage(),
             new LinearGradientPackage(),
+            new RNFirebasePackage(),
+            new RNFirebaseMessagingPackage(),
+            new RNFirebaseNotificationsPackage(),
             new CookieManagerPackage()
       );
     }
