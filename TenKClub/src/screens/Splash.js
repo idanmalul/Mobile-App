@@ -6,16 +6,20 @@ import RNRestart from 'react-native-restart'; // Import package from node module
 import {
     StyleSheet,
     View,
-    StatusBar, ImageBackground, AsyncStorage, Dimensions, Image, NetInfo, I18nManager,Alert,Platform
+    StatusBar, ImageBackground, Dimensions, Image, NetInfo, I18nManager,Alert,Platform
 } from 'react-native';
-I18nManager.forceRTL(true); 
-var width = Dimensions.get('window').width; //full width
-var height = Dimensions.get('window').height; //full height
+import AsyncStorage from '@react-native-community/async-storage';
+I18nManager.forceRTL(false); 
+// var width = Dimensions.get('window').width; //full width
+// var height = Dimensions.get('window').height; //full height
 import { Images, Colors } from '../themes'
+import { uploadEvent, getOfferDetailById } from "../constants/apis";
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 const { height, width } = Dimensions.get('window');
 const aspectRatio = height / width;
 const isRTL = I18nManager.isRTL;
+import AppForceUpdate from './AppForceUpdate';
+import AppUpdate from './AppUpdate';
 export default class Splash extends React.Component {
     static navigationOptions = {
         header: null
@@ -25,18 +29,25 @@ export default class Splash extends React.Component {
         if(isRTL == false){
             //alert("first");
             //this.props.dispatch(setAppLayoutDirection('rtl'));
-            RNRestart.Restart();
+            // RNRestart.Restart();
           }
  
     }
 
+    
     async componentDidMount() {
+        
         this.checkPermission();
         this.createNotificationListeners(); //add this line
       }
 
       ////////////////////// Add these methods //////////////////////
-  
+      homeFun(){
+        console.log("homeFun function of notification return.");
+        return false;
+        // alert("home");
+        // this.getMadeForYouOffers();
+      }
   //Remove listeners allocated in createNotificationListeners()
 componentWillUnmount() {
     this.notificationListener();
@@ -88,9 +99,7 @@ showAlert(title, body, data) {
     Alert.alert(
       title, body,
       [
-          { text: 'OK', onPress: () => this.props.navigation.navigate('storyDetail', {
-            item: JSON.parse(data),
-        }) },
+          { text: 'OK', onPress: () =>  this.onAlertClickButton(data) },
       ],
       { cancelable: false },
     );
@@ -98,6 +107,87 @@ showAlert(title, body, data) {
 }, 3000);
   }
   
+  async getOfferDetail(storyID,sent_primary_id){
+    // multipleData = [];
+    
+    let session_user_id = 2;
+      await AsyncStorage.multiGet(['username', 'password', 'user_id']).then((data) => {
+          username = data[0][1];
+          // password = data[1][1];
+          session_user_id = data[2][1];
+        });
+      //   alert(session_user_id);
+      //   return false;
+      // this.setState({ isLoading: true });
+      let formBody = "user_id="+session_user_id+"&story_id="+storyID+"&sent_primary_id="+sent_primary_id+"";
+      // setTimeout(() => {
+      //   this.setState({ isLoading: false });
+      // }, 10000);
+      if (username !== null && username !== ''){
+     var responseRecord = await fetch(
+            // 'http://192.168.1.23/10k-club/webservices/get_user_profile.php',
+            // 'http://10k.tempurl.co.il/webservices/get_user_profile.php',
+            getOfferDetailById,
+            {
+              method:'POST',
+              headers: {
+                Authorization: "Bearer token",
+                "Content-Type": "application/x-www-form-urlencoded"
+                // Accept: 'application/json',
+                // 'Content-Type': 'application/json',
+              },
+            body: formBody,
+          
+          })
+    
+    .then((response)=> response.json())
+    
+    .then((res) => {
+      if(res.status === 'true'){
+      //  alert(JSON.stringify(res.favourites[0].favourite_name));
+        
+        // this.setState({ 
+        //   story_description: res.response.story_description,
+        //   campaign_description: res.response.campaign_description,
+        // });
+        this.setState({ isLoading: false });
+        // this._singleTapMultipleSelectedButtons(res.user_details.favourites);
+        //this.setState.multipleSelectedData.includes(res.user_details.favourites);
+        return res.response
+      }
+      else {
+        this.setState({ isLoading: false });
+        alert(res.message);
+      }
+    
+    
+    })
+    .catch(error => {
+      this.setState({ isLoading: false });
+      console.log(error);
+    });
+  }else{
+    this.setState({ isLoading: false });
+  }
+
+    return responseRecord;
+    }
+
+ async onAlertClickButton(data){
+    if(data == 1){
+      this.props.navigation.navigate('Notification_list');
+    }else{
+      var data_2 = await this.getOfferDetail(data.id,data.sent_primary_id);
+      // alert(JSON.stringify(data_2));
+      console.log(data_2);
+      var json = JSON.stringify(data_2);
+      this.props.navigation.navigate('OfferDetails', {
+        item: JSON.parse(json),
+        callHome: this.homeFun.bind(this)
+      });
+    }
+    
+  }
     //1
     async checkPermission() {
         const enabled = await firebase.messaging().hasPermission();
@@ -169,12 +259,19 @@ showAlert(title, body, data) {
                     
                     if (username !== null && username !== ''){
                     //    this.props.navigation.navigate('Profile');
-                         this.props.navigation.navigate('Tabs');
-                       // this.props.navigation.navigate('GetNoti_Token');
+                        //  this.props.navigation.navigate('Tabs');
+                      //  this.props.navigation.navigate('Home');
+                      // this.props.navigation.navigate('ForgotPass');
+                      this.props.navigation.navigate('logged_in');
+                      // this.props.navigation.navigate('Notification_list');
+                      // this.props.navigation.navigate('Tabs');
+                    // this.props.navigation.navigate('Home');
                         return false;
                     }else{
-                         this.props.navigation.navigate('Login');
-                        //this.props.navigation.navigate('GetNoti_Token');
+                      // this.props.navigation.navigate('ForgotPass');
+                      this.props.navigation.navigate('LoginScreen');
+                        //  this.props.navigation.navigate('Login');
+                        // this.props.navigation.navigate('Home'); 
                         // this.props.navigation.navigate('storyList');
                     }
                         
@@ -190,12 +287,17 @@ showAlert(title, body, data) {
     render() {
         return (
             <View style={styles.container}>
-                <ImageBackground source={Images.splash}  resizeMode="stretch" style={styles.container}>
-
+            
+                <ImageBackground source={Images.screen_1_back}  resizeMode="stretch" style={styles.container}>
+                <AppForceUpdate/>
                 <View style={styles.logoContainer}>
                                {/* <Image style={styles.logo} 
                                     source={require('../images/logo.png')}>
                                 </Image> */}
+                                <Image style={styles.logo}
+                                 // source={require('../images/logo.png')}> 
+                                 source={require('../images/logo_login.png')}> 
+                             </Image>
                             </View>
                 </ImageBackground>
             </View>
@@ -212,9 +314,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flex: 1
         //top:50
+    },
+    logo: {
+        width: 143,
+        height: 155, 
     }
-    // logo: {
-    //     width: 143,
-    //     height: 155, 
-    // }
 })

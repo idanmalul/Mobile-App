@@ -87,7 +87,7 @@
                 <?php } ?>
 
             <br/>
-            <input type="file" name="image" value="<?php if(!empty($story_detail)){ echo $story_detail[0]->story_image; } ?>" class="form-control" <?php if(empty($story_detail[0]->story_image)){ ?>data-validate="required"<?php } ?> />
+            <input type="file" name="image" value="<?php if(!empty($story_detail)){ echo $story_detail[0]->story_image; } ?>" class="form-control" <?php if(empty($story_detail[0]->story_image)){ ?>data-validate="required"<?php } ?> onchange="checkFileDuration()" id="vid"/>
             
             </div>
              
@@ -148,6 +148,7 @@
             </div>
             <div class="form-group">
                 <!--<label class="control-label">You can schedule your posts for up to a month.</label><br><br>-->
+                <input type="hidden" name="video_duration" id="video_duration" value="" class="form-control">
                 <?php if(!empty($story_detail)){ ?>
                 <input type="hidden" name="story_id" value="<?php echo $story_detail[0]->id; ?>" class="form-control">
 
@@ -165,3 +166,120 @@
         </form>
     </div>
 </div>
+
+<script>
+
+//reference
+//https://developer.mozilla.org/en-US/docs/Web/API/FileReader/
+//http://community.sitepoint.com/t/get-video-duration-before-upload/30623/4
+
+//set your time on MaxTime like minutes:seconds
+//if you wanna hours just replace below line on line 25
+//var time = hours+':'minutes + ':' + seconds;
+
+//maxTime = "01:00:00"; //if add a hours
+
+var videoMaxTime = "00:15"; //minutes:seconds   //video
+var audioMaxTime = "05:00"; //minutes:seconds   //audio
+var uploadMax = 31457280; //bytes  //30MP
+
+//for seconds to time
+function secondsToTime(in_seconds) {
+
+  var time = '';
+  in_seconds = parseFloat(in_seconds.toFixed(2));
+
+  var hours = Math.floor(in_seconds / 3600);
+  var minutes = Math.floor((in_seconds - (hours * 3600)) / 60);
+  var seconds = in_seconds - (hours * 3600) - (minutes * 60);
+  //seconds = Math.floor( seconds );
+  seconds = seconds.toFixed(0);
+
+  if (hours < 10) {
+    hours = "0" + hours;
+  }
+  if (minutes < 10) {
+    minutes = "0" + minutes;
+  }
+  if (seconds < 10) {
+    seconds = "0" + seconds;
+  }
+  var time = minutes + ':' + seconds;
+
+  return time;
+
+}
+
+function checkFileDuration() {
+
+  var file = document.querySelector('input[type=file]').files[0];
+  var reader = new FileReader();
+  var fileSize = file.size;
+
+  if (fileSize > uploadMax) {
+    alert('file too large');
+//    $('#vid').val("");
+    return false;
+  } else {
+//    $('#pross').show();
+    reader.onload = function(e) {
+
+      if (file.type == "video/mp4" || file.type == "video/ogg" || file.type == "video/webm" || file.type == "video/mkv") {
+        var videoElement = document.createElement('video');
+        videoElement.src = e.target.result;
+        var timer = setInterval(function() {
+          if (videoElement.readyState === 4) {
+            getTime = secondsToTime(videoElement.duration);
+            $("#video_duration").val(getTime);
+            if (getTime > videoMaxTime) {
+              alert('Please upload less than 15 seconds video only');
+              console.log('Please upload less than 15 seconds video only');
+//              $('#vid').val("");
+              
+            }
+//            $('#pross').hide();
+            clearInterval(timer);
+            return false;
+            
+          }
+        }, 500)
+      } else if (file.type == "audio/mpeg" || file.type == "audio/wav" || file.type == "audio/ogg") {
+
+        var audioElement = document.createElement('audio');
+        audioElement.src = e.target.result;
+        var timer = setInterval(function() {
+          if (audioElement.readyState === 4) {
+            getTime = secondsToTime(audioElement.duration);
+            if (getTime > audioMaxTime) {
+              alert('1 minutes audio only')
+              $('#vid').val("");
+            }
+//            $('#pross').hide();
+            clearInterval(timer);
+          }
+        }, 500)
+      } else {
+        var timer = setInterval(function() {
+          if (file) {
+
+            alert('invaild File')
+//            $('#vid').val("");
+            return false;
+//            $('#pross').hide();
+            clearInterval(timer);
+          }
+        }, 500)
+
+      }
+
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+
+    } else {
+      alert('nofile');
+    }
+
+  }
+}
+</script>

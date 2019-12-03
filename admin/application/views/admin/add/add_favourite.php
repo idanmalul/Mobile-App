@@ -47,6 +47,26 @@
             </div>
             
             <div class="form-group">
+
+                <label class="control-label">Favourite Image</label>
+                <?php if(!empty($favourite[0]->favourite_image)){ ?>
+                <br/>
+                <div class="">
+                    <br/>
+                    <div class="">
+                    <img src="<?php echo base_url('uploads/favourite_images').'/'.$favourite[0]->favourite_image; ?>" height="100" width="100"><br/><br/>
+                    </div>
+                
+                
+                </div>
+                <?php } ?>
+
+            <br/>
+            <input type="file" name="favourite_image" value="<?php if(!empty($favourite)){ echo $favourite[0]->favourite_image; } ?>" class="form-control" <?php if(empty($favourite[0]->favourite_image)){ ?>data-validate="required"<?php } ?> />
+            
+            </div>
+            
+            <div class="form-group">
                 <?php if(!empty($favourite)){ ?>
                 <input type="hidden" name="favourite_id" value="<?php echo $favourite[0]->favourite_id; ?>">
                 <input type="submit" name="submit" value="Update" class="btn btn-success">

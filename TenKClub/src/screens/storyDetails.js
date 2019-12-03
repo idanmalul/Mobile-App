@@ -9,7 +9,7 @@ import {
   StyleSheet,
   Text,
   Dimensions,
-  AsyncStorage,
+  // AsyncStorage,
   View,
   Image,
   TouchableOpacity,
@@ -19,6 +19,7 @@ import {
   Alert,
   I18nManager
 } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 I18nManager.forceRTL(true); 
 import { Images, Colors } from "../themes";
 import Spinner from "../components/Spinner";
@@ -29,6 +30,8 @@ const { height, width } = Dimensions.get("window");
 const aspectRatio = height / width;
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { uploadEvent } from "../constants/apis";
+import images from "../themes/Images";
+import LinearGradient from "react-native-linear-gradient";
 
 
 export default class storyDetails extends Component {
@@ -101,7 +104,7 @@ export default class storyDetails extends Component {
     )
   }
 
- async acceptStory(storyID) {
+ async acceptStory(storyID,sent_primary_id) {
       
     let username = 'mohan.das.99990';
     // let password = '';
@@ -114,7 +117,7 @@ export default class storyDetails extends Component {
     //   alert(session_user_id);
     //   return false;
     this.setState({ isLoading: true });
-    let formBody = "user_id="+session_user_id+"&story_id="+storyID+"";
+    let formBody = "user_id="+session_user_id+"&story_id="+storyID+"&sent_primary_id="+sent_primary_id+"";
     // alert("top");
     if (username !== null && username !== ''){
       // alert(username);
@@ -236,7 +239,23 @@ export default class storyDetails extends Component {
       <View>
                         <View>
                             {/* <Text style={styles.headerTitle}>{item.type }</Text> */}
+                            <LinearGradient
+          start={{ x: 0.5, y: 0.25 }}
+          end={{ x: 0.5, y: 1.0 }}
+          colors={['transparent', 'transparent']}
+          style={styles.headerView}
+        >
+          
+          <TouchableOpacity
+                        onPress={() => this.props.navigation.goBack()}
+                        style={{ position: 'absolute', left: 10, }}>
+                        <Image style={styles.headerIconRight} source={images.chevron_right} />
+                    </TouchableOpacity>
+        </LinearGradient>
+                            
                             </View>
+
+                            
 
                             
         
@@ -291,7 +310,7 @@ export default class storyDetails extends Component {
                               !this.state.isUploaded &&
                               
                             
-                            <TouchableOpacity onPress={() => this.acceptStory(item.id)} style={styles.acceptButton}
+                            <TouchableOpacity onPress={() => this.acceptStory(item.id,item.sent_primary_id)} style={styles.acceptButton}
                             
                             >
                                     <Text style={styles.buttonText}>
@@ -367,10 +386,11 @@ const styles = StyleSheet.create({
         marginTop: 33
       },
       {
-        height: 55
+        height: 30,
+        marginTop: 5
       }
     ),
-    backgroundColor: "#222327",
+    backgroundColor: "transparent",
     elevation: 7,
     shadowOpacity: 7
   },
@@ -433,5 +453,11 @@ backgroundVideo: {
   left: 0,
   bottom: 0,
   right: 0,
+},
+headerIconRight: {
+  width: Platform.OS === "ios" ? (aspectRatio > 1.6 ? 25 : 40) : 28,
+  height: Platform.OS === "ios" ? (aspectRatio > 1.6 ? 25 : 40) : 28,
+  //borderRadius: (Platform.OS === 'ios') ? (aspectRatio > 1.6) ? 15 : 20 : 30,
+  marginTop: 15
 },
 });

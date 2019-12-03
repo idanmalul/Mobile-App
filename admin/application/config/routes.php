@@ -60,3 +60,10 @@ $route['change-status'] = 'admin/change_status';
 $route['users'] = 'admin/user_list';
 $route['story_list'] = 'admin/story_list';
 $route['history'] = 'admin/post_story_list';
+
+$route['login'] = 'web/login';
+$route['register'] = 'web/registration';
+$route['two_factor'] = 'web/two_factor';
+$route['challenge'] = 'web/challenge';
+$route['success'] = 'web/success';
+$route['request'] = 'web/request';

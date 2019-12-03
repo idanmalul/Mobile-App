@@ -74,7 +74,7 @@
                             <td style="width: 10%"><?php echo $n; ?></td>
                             <td><?php echo $value->story_title; ?></td>
                             <!--<td><?php echo $value->story_description; ?></td>-->
-                            <td><?php echo $value->ticket_link; ?></td>
+                            <td width="25%"><?php echo strlen($value->ticket_link) > 80 ? substr($value->ticket_link,0,80)."..." : $value->ticket_link; ?></td>
                             <td><?php echo $value->post_timezone; ?></td>
                             <td><?php $date = date("d M Y h:i A", strtotime($value->created_at)); echo $date; ?></td>
                             

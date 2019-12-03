@@ -18,10 +18,12 @@ class GetMyEventList extends DB {
                 $this->json_output($response);
                 exit();
             }
-
+//            $where = array('user_id'=>$user_id);
+//            $get_story = $this->get_record_where('st', $where);
             $query = "SELECT s.* FROM story s INNER JOIN story_user su ON su.story_id=s.id WHERE su.user_id='$user_id' AND su.upload_status=1";
             $get_story = $this->query_result($query);
-
+//            echo '<pre>';
+//            print_r($get_story);
             if(!empty($get_story)){
                 $story_details = array();
 	    	foreach ($get_story as $key=>$value){
@@ -36,6 +38,7 @@ class GetMyEventList extends DB {
                         }else{
                             $value['created_at']= '';
                         }
+//	    		unset($value['password']);
                         
 	    		$story_details[] = $value;
 	    	}

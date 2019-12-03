@@ -63,6 +63,11 @@
  * Different environments will require different levels of error reporting.
  * By default development will show errors but testing and live will hide them.
  */
+header("Access-Control-Allow-Origin:*");
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE, PUT');
+header('Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Request-With, X-CLIENT-ID, X-CLIENT-SECRET');
+header('Access-Control-Allow-Credentials: true');
+
 switch (ENVIRONMENT)
 {
 	case 'development':

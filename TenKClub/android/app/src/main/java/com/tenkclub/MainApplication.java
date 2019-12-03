@@ -3,6 +3,14 @@ package com.tenkclub;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
+import com.tron.ReactNativeWheelPickerPackage;
+import net.mikehardy.rnupdateapk.RNUpdateAPKPackage;
+import com.artirigo.fileprovider.RNFileProviderPackage;
+import com.rnfs.RNFSPackage;
+import com.parryworld.rnappupdate.RNAppUpdatePackage;
+import org.wonday.pdf.RCTPdfView;
+import com.RNFetchBlob.RNFetchBlobPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -33,6 +41,14 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new AsyncStoragePackage(),
+            new ReactNativeWheelPickerPackage(),
+            new RNUpdateAPKPackage(),
+            new RNFileProviderPackage(),
+            new RNFSPackage(),
+            new RNAppUpdatePackage(),
+            new RCTPdfView(),
+            new RNFetchBlobPackage(),
            
             new ReactNativeRestartPackage(),
             new RNGestureHandlerPackage(),
@@ -62,4 +78,9 @@ public class MainApplication extends Application implements ReactApplication {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
   }
+
+  // @Override
+  // public String getFileProviderAuthority() {
+  //       return "com.tenkclub.provider";
+  // }
 }

@@ -51,7 +51,8 @@
                     <th>Sr.No.</th>
                     <th>User Name</th>
                     <th>Story Title</th>
-                    <th>Story Image/Video</th>
+                    <!--<th>Story Image/Video</th>-->
+                    <th>Viewer Amount</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -67,15 +68,12 @@
                             <td style="width: 10%"><?php echo $n; ?></td>
                             <td><?php echo $value->full_name; ?></td>
                             <td><?php echo $value->story_title;?></td>
-                            <td width="10%">
+<!--                            <td width="10%">
                                 <?php if(!empty($value->story_image)){ ?>
-                <!--<br/>-->
                 <div class="">
                     <?php if(!empty($value->media_type == 1)){ ?>
-                    <!--<br/>-->
                     <div class="">
                     <img src="<?php echo base_url('uploads/story_images').'/'.$value->story_image; ?>" height="100" width="180">
-                    <!--<br/>-->
                     </div>
                    
 
@@ -88,10 +86,10 @@
 </video>
                      <?php } ?>
 
-                <!--<br/>-->
                 </div>
                 <?php } ?>
-                            </td>
+                            </td>-->
+                            <td><?php echo $value->story_viewer_count;?></td>
                             <td style="width: 25%">
                                 
                                 <a onClick="if(!confirm('Are you sure, You want delete this record?')){return false;}" href="<?php echo site_url('admin/delete') . '/delete_post_story/post_story/post_id/' . $value->post_id; ?>" class="btn btn-danger btn-sm btn-icon icon-left" data-toggle="tooltip" data-placement="right" title="Delete"><i class="fa fa-trash"></i></a>

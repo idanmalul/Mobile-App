@@ -121,7 +121,7 @@ class Project_model extends CI_Model {
         $count = $this->db->count_all($table);
         return $count;
     }
-    public function get_column_data_where($table,$column='',$where='',$orderby='') {
+    public function get_column_data_where($table,$column='',$where='',$orderby='',$orderFormat='') {
         if($column !='')
         {
             $this->db->select($column);
@@ -137,7 +137,11 @@ class Project_model extends CI_Model {
         }
         if($orderby !='')
         {
-            $this->db->order_by($orderby,'ASC');
+            if($orderFormat != ''){
+                $this->db->order_by($orderby,$orderFormat);
+            }else{
+                $this->db->order_by($orderby,'ASC');
+            }
         }
         $query = $this->db->get();
         return $query->result();

@@ -8,7 +8,7 @@ import {
   FlatList,
   Text,
   Dimensions,
-  AsyncStorage,
+  // AsyncStorage,
   View,
   Image,
   TouchableOpacity,
@@ -21,7 +21,8 @@ import {
   I18nManager,
   Linking
 } from "react-native";
-I18nManager.forceRTL(true); 
+import AsyncStorage from '@react-native-community/async-storage';
+I18nManager.forceRTL(false); 
 import { Images, Colors } from "../themes";
 import { getEventList, myEventList } from "../constants/apis";
 import LinearGradient from "react-native-linear-gradient";
@@ -38,7 +39,7 @@ export default class MyEventList extends Component {
     title: '', // My Event
     tabBarIcon: ({ focused, tintColor }) => {
      
-      return <Image style={[styles.icon, { tintColor: tintColor }]} source={require('../images/icons/icon-1.png')}/>;
+      return <Image style={[styles.icon, { tintColor: tintColor }]} source={require('../images/icons/icon4.png')}/>;
     },
 };
   constructor(props) {
@@ -277,7 +278,7 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 15,
-    textAlign: 'left',
+    textAlign: isRTL ? 'left' : 'right',
     color: "#ffffff",
     
     // textAlign: 'right'
@@ -285,14 +286,14 @@ const styles = StyleSheet.create({
   itemdate: {
     fontSize: 15,
     color: "#a7a7a7", 
-    textAlign: 'left'
+    textAlign: isRTL ? 'left' : 'right',
   },
   itemLastMessage: {
     fontSize: 15,
     color: '#32CD32',
     textDecorationLine: 'underline',
     //  textAlign: 'left'
-    textAlign: 'right' 
+    textAlign: isRTL ? 'right' : 'left',
   },
   inputMain: {
     marginTop: 15,
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   icon: {
-    width: 28,
-    height: 28,
+    width: 32,
+    height: 32,
   },
 });

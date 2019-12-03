@@ -65,6 +65,13 @@
                         <?php } ?>>
                             <a href="<?php echo site_url('admin/user_list'); ?>">
                                 <i class="fa fa-list"></i>
+                                <span class="title">Instagram Accounts</span>
+                            </a>
+                    </li>
+                    <li <?php if($this->uri->segment(2) == 'member_list'){ ?>class="active"
+                        <?php } ?>>
+                            <a href="<?php echo site_url('admin/member_list'); ?>">
+                                <i class="fa fa-list"></i>
                                 <span class="title">User Management</span>
                             </a>
                     </li>
@@ -83,6 +90,28 @@
                                 <span class="title">Story History</span>
                             </a>
                     </li>
+                    <li <?php if($this->uri->segment(2) == 'campaign_list'){ ?>class="active"
+                        <?php } ?>>
+                            <a href="<?php echo site_url('admin/campaign_list'); ?>">
+                                <i class="fa fa-list"></i>
+                                <span class="title">Campaign</span>
+                            </a>
+                    </li>
+                    <li <?php if($this->uri->segment(2) == 'static_campaign_list'){ ?>class="active"
+                        <?php } ?>>
+                            <a href="<?php echo site_url('admin/static_campaign_list'); ?>">
+                                <i class="fa fa-list"></i>
+                                <span class="title">Static Campaign</span>
+                            </a>
+                    </li>
+                    
+<!--                    <li <?php if($this->uri->segment(2) == 'company_list'){ ?>class="active"
+                        <?php } ?>>
+                            <a href="<?php echo site_url('admin/company_list'); ?>">
+                                <i class="fa fa-list"></i>
+                                <span class="title">Company</span>
+                            </a>
+                    </li>-->
 
                 </ul>
 

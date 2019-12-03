@@ -7,7 +7,7 @@ import {
   FlatList,
   Text,
   Dimensions,
-  AsyncStorage,
+  // AsyncStorage,
   View,
   Image,
   TouchableOpacity,
@@ -19,6 +19,7 @@ import {
   BackHandler,
   I18nManager
 } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 I18nManager.forceRTL(true); 
 import { Images, Colors } from "../themes";
 import { getEventList } from "../constants/apis";
@@ -159,7 +160,7 @@ export default class storyList extends Component {
       <ImageBackground source={Images.screen_4}  resizeMode="stretch" style={styles.container}>
       <View style={{flexDirection:'row-reverse',marginLeft: 15}}>
       <TouchableOpacity 
-                        onPress={() => this.props.navigation.navigate("Profile")}>
+                        onPress={() => this.props.navigation.navigate("Favourites")}>
                         <Image source={Images.settings} style={styles.headerIcon} />
                     </TouchableOpacity> 
       </View>

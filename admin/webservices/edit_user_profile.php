@@ -4,7 +4,8 @@ require './db.class.php';
 class EditUserProfile extends DB {
     
     function edit_user_profile() {
-
+//        $response = array('status' => 'true', 'message' => $_REQUEST);
+//        $this->json_output($response);        exit();
         if(!empty($_REQUEST['user_id'])){
                     $user_id = $_REQUEST['user_id'];
                     $where = array('user_id'=>$user_id);
@@ -14,6 +15,22 @@ class EditUserProfile extends DB {
                        $this->json_output($response);
                        exit();
                     }
+                    
+//                    $profileimg = '';
+//                    if(!empty($_REQUEST['user_profile_img'])){
+//                        $user_profile_img = $_REQUEST['user_profile_img'];
+//                        $profileimg = time(). ".png";
+//                        $pro_path = "../uploads/user_profile_images/".$profileimg;
+//                        file_put_contents($pro_path,base64_decode($user_profile_img));
+//                    }else{
+//                        $profileimg = $check_user[0]['user_profile_img'];
+//                    }
+            //print_r($check_user);die();
+            if(!empty($_REQUEST['company'])){
+                $company=  $_REQUEST['company'];
+            }else{
+                $company=  $check_user[0]['company'];
+            }
                     
                     if(!empty($_REQUEST['first_name'])){
                         $first_name=  $_REQUEST['first_name'];
@@ -41,14 +58,94 @@ class EditUserProfile extends DB {
                         $favourites= $check_user[0]['favourites'];
                     }
                     
-                    $data = array('first_name' => $first_name, 'last_name' => $last_name, 'gender'=>$gender, 'age'=>$age, 'favourites'=>$favourites);
+                    $data = array('first_name' => $first_name, 'last_name' => $last_name, 'age'=>$age, 'favourites'=>$favourites);
                     
+                    if($gender != 0){
+                        $data['gender'] = $gender;
+                    }
+                    if($company != "undefined"){
+                        $data['company'] = $company;
+                    }
+                    
+                    
+//                    if(!empty($_REQUEST['gender'])){
+//                        if(strtolower($_REQUEST['gender']) == 'male'){
+//                            $gender=  1;
+//                        } else if(strtolower($_REQUEST['gender']) == 'female'){
+//                            $gender=  2;
+//                        } else {
+//                            $gender=  3;
+//                        }
+//                        
+//                    }else{
+//                        $gender=  $check_user[0]['gender'];
+//                    }
+//                    if(!empty($_REQUEST['age'])){
+//                        $age=  $_REQUEST['age'];
+//                    }else{
+//                        $age=  $check_user[0]['age'];
+//                    }
+//                    if(!empty($_REQUEST['favourites'])){
+//                        $favourites= $_REQUEST['favourites'];
+//                    }else{
+//                        $favourites= $check_user[0]['favourites'];
+//                    }
+//                    
+//                    if(!empty($_REQUEST['birthday'])){
+//                        $var = $_REQUEST['birthday'];
+//                        $date = str_replace('/', '-', $var);
+//                        $birthday= date('Y-m-d', strtotime($date));
+//                    }else{
+//                        $birthday=  $check_user[0]['birthday'];
+//                    }
+//                    if(!empty($_REQUEST['country_code'])){
+//                        $country_code=  $_REQUEST['country_code'];
+//                    }else{
+//                        $country_code=  $check_user[0]['country_code'];
+//                    }
+//                    if(!empty($_REQUEST['phone_number'])){
+//                        $contact_no=  $_REQUEST['phone_number'];
+//                    }else{
+//                        $contact_no=  $check_user[0]['contact_no'];
+//                    }
+//                    if(!empty($_REQUEST['address'])){
+//                        $address=  $_REQUEST['address'];
+//                    }else{
+//                        $address=  $check_user[0]['address'];
+//                    }
+//                    
+//                    if(!empty($_REQUEST['postal_code'])){
+//                        $postal_code=  $_REQUEST['postal_code'];
+//                    }else{
+//                        $postal_code=  $check_user[0]['postal_code'];
+//                    }
+//                    
+//                    if(!empty($_REQUEST['city'])){
+//                        $city=  $_REQUEST['city'];
+//                    }else{
+//                        $city=  $check_user[0]['city'];
+//                    }
+//                    
+//                    if(!empty($_REQUEST['provision'])){
+//                        $state=  $_REQUEST['provision'];
+//                    }else{
+//                        $state=  $check_user[0]['provision'];
+//                    }
+//                    
+//                    if(!empty($_REQUEST['country'])){
+//                        $country=  $_REQUEST['country'];
+//                    }else{
+//                        $country=  $check_user[0]['country'];
+//                    }
+                    
+//                    $data = array('first_name' => $first_name, 'last_name' => $last_name, 'gender'=>$gender, 'age'=>$age, 'favourites'=>$favourites, 'birthday'=>$birthday, 'country_code'=>$country_code, 'contact_no'=>$contact_no, 'address'=>$address, 'postal_code'=>$postal_code, 'city'=>$city, 'state'=>$state, 'country'=>$country, 'is_profile_updated'=>2);
+                    //$data=array("u_password"=>$u_password, "user_full_name"=>$user_full_name);
                     $update_table = $this->update_records('users', $data, $where);
                     $get_user_detail = $this->get_record_where('users', $where);
                     if($get_user_detail){
                        $user_details = $get_user_detail[0];
                        unset($user_details['user_password']);
-                      
+                      // $user_details['user_profile_img']= USER_PROFILE_IMAGES.$user_details['user_profile_img'];
                     }
                     $response = array('status' => 'true', 'message' => 'Profile Successfully Updated.', 'user_details' => $user_details);
         } else {

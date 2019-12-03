@@ -7,7 +7,7 @@ import {
   FlatList,
   Text,
   Dimensions,
-  AsyncStorage,
+  // AsyncStorage,
   View,
   Image,
   TouchableOpacity,
@@ -19,6 +19,7 @@ import {
   BackHandler,
   I18nManager
 } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 I18nManager.forceRTL(true); 
 import { Images, Colors } from "../themes";
 import { getEventList } from "../constants/apis";

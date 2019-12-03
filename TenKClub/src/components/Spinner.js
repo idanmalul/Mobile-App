@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {
     View, Modal, StyleSheet,
-    ActivityIndicator, Text
+    ActivityIndicator, Text, Image, ImageBackground
 } from 'react-native'
 import { Colors } from '../themes';
 
@@ -23,13 +23,18 @@ export default class Spinner extends Component {
                     onRequestClose={() => {this.setState({ isLoading: false })}}>
                     <View style={styles.mainView}>
                         <View style={styles.childView}>
-                            <ActivityIndicator
+                            {/* <ActivityIndicator
                                 style={styles.ActivityIndicator}
                                 color={Colors.orangeColor}
                                 size='large'
                                 animating={this.state.isLoading}
                             />
-                            <Text style={styles.loadingText}>Please Wait...</Text>
+                            <Text style={styles.loadingText}>Please Wait...</Text> */}
+                            <Image style={styles.loaderImage}
+                                    // source={require('../images/logo.png')}> 
+                                    source={require('../images/Loading.gif')}> 
+                                </Image>
+                            
                         </View>
                     </View>
                 </Modal>
@@ -47,11 +52,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#00000040'
     },
     childView: {
-        height: 70,
-        marginLeft: 20,
-        marginRight: 20,
+        // height: 70,
+        height: '100%',
+        width: '100%',
+        // marginLeft: 20,
+        // marginRight: 20,
         alignItems: 'center',
-        backgroundColor: "#FFF",
+        // backgroundColor: "#FFF",
+        backgroundColor: "#000",
         flexDirection: 'row',
         borderRadius: 3
     },
@@ -63,5 +71,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'gray',
         fontWeight: 'bold'
-    }
+    },
+    loaderImage: {
+        width: '100%',
+        height: '100%',
+    },
+
 });

@@ -4,6 +4,31 @@ platform :ios, '9.0'
 target 'TenKClub' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
   #use_frameworks!
+
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+  pod 'glog', :podspec => "../node_modules/react-native/third-party-podspecs/GLog.podspec"
+
+  pod 'React', path: '../node_modules/react-native', subspecs: [
+    'Core',
+    'CxxBridge',
+    'RCTAnimation',
+    'RCTActionSheet',
+    'RCTImage',
+    'RCTLinkingIOS',
+    'RCTNetwork',
+    'RCTSettings',
+    'RCTText',
+    'RCTVibration',
+    'RCTWebSocket',
+    'RCTPushNotification',
+    'RCTCameraRoll',
+    'RCTBlob',
+    'RCTGeolocation',
+    'DevSupport'
+  ]
+
   pod 'Firebase/Core'
   pod 'Firebase/Messaging'
   # Pods for TenKClub
@@ -12,6 +37,22 @@ target 'TenKClub' do
   #inherit! :search_paths
     # Pods for testing
   #end
+
+  pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
+
+  pod 'react-native-pdf', :path => '../node_modules/react-native-pdf'
+
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
+  #pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
+  #pod 'RNCAsyncStorage', :podspec => '../node_modules/@react-native-community/async-storage/RNCAsyncStorage.podspec'
+  
+
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+  #pod 'RNCAsyncStorage', :podspec => '../node_modules/@react-native-community/async-storage/RNCAsyncStorage.podspec'
+
+    
 
   target 'TenKClubTests' do
     inherit! :search_paths
@@ -33,4 +74,25 @@ target 'TenKClub-tvOS' do
 
 end
 
+# post_install do |installer|
+#   installer.pods_project.targets.each do |target|
+#     if target.name == "React"
+#       target.remove_from_project
+#     end
+#   end
+# end
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if target.name == "React"
+      target.remove_from_project
+    end
 
+    if target.name == "yoga"
+      target.remove_from_project
+    end
+
+    if target.name == "RNCAsyncStorage"
+      target.remove_from_project
+    end
+  end
+end

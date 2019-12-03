@@ -129,7 +129,7 @@
                     </div>-->
 
                     <!-- Add class "fade-in-effect" for login form effect -->
-                    <form method="post" role="form" id="login" class="login-form fade-in-effect" action="<?php echo site_url('login'); ?>">
+                    <form method="post" role="form" id="login" class="login-form fade-in-effect" action="<?php echo site_url('login/index'); ?>">
 
                         <div class="login-header">
                             <!--a href="<?php echo site_url('login'); ?>" class="logo">

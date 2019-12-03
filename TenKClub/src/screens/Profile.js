@@ -10,7 +10,7 @@ import {
   StyleSheet,
   Text,
   Dimensions,
-  AsyncStorage,
+  // AsyncStorage,
   View,
   TextInput,
   TouchableOpacity,
@@ -26,6 +26,7 @@ import {
   I18nManager
  // BVLinearGradient
 } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 I18nManager.forceRTL(true); 
 import { Images, Colors } from "../themes";
 import { getUserProfile, updateUserProfile } from "../constants/apis";
@@ -37,15 +38,16 @@ import { SelectMultipleButton, SelectMultipleGroupButton } from 'react-native-se
 const { height, width } = Dimensions.get("window");
 const aspectRatio = height / width;
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import images from "../themes/Images";
 const isRTL = I18nManager.isRTL;
 export default class Profile extends Component {
 
   
   static navigationOptions = {
-    title: '',  // Search
+    title: '',  // Message
     tabBarIcon: ({ focused, tintColor }) => {
      
-      return <Image style={[styles.icon, { tintColor: tintColor }]} source={require('../images/icons/icon-3.png')}/>; 
+      return <Image style={[styles.icon, { tintColor: tintColor }]} source={require('../images/icons/icon5.png')}/>;
     },
 };
 
@@ -137,7 +139,7 @@ updateRef(name, ref) {
         let genderText = '';
         if(res.user_details.gender == 1){
           genderText = 'Male';
-        } else if(res.user_details.gender == 1) {
+        } else if(res.user_details.gender == 2) {
           genderText = 'Female';
         }else{
           genderText = 'Not Specified';
@@ -157,7 +159,6 @@ updateRef(name, ref) {
           user_id : res.user_details.user_id,
           Age :res.user_details.age,
           eventType : genderText
-          
         });
         this.setState({ isLoading: false });
         // this._singleTapMultipleSelectedButtons(res.user_details.favourites);
@@ -321,8 +322,8 @@ updateRef(name, ref) {
           <Text style={styles.headerTitle}>פרטים אישיים</Text>
           <TouchableOpacity
                         onPress={() => this.props.navigation.goBack()}
-                        style={{ position: 'absolute', right: 10, }}>
-                        <Image style={styles.headerIconRight} />
+                        style={{ position: 'absolute', left: 10, }}>
+                        <Image style={styles.headerIconRight} source={images.chevron_right} />
                     </TouchableOpacity>
         </LinearGradient>
       </View>
@@ -687,8 +688,8 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   headerIconRight: {
-    width: Platform.OS === "ios" ? (aspectRatio > 1.6 ? 25 : 40) : 60,
-    height: Platform.OS === "ios" ? (aspectRatio > 1.6 ? 25 : 40) : 60,
+    width: Platform.OS === "ios" ? (aspectRatio > 1.6 ? 25 : 40) : 25,
+    height: Platform.OS === "ios" ? (aspectRatio > 1.6 ? 25 : 40) : 25,
     //borderRadius: (Platform.OS === 'ios') ? (aspectRatio > 1.6) ? 15 : 20 : 30,
     marginTop: 10
   },
@@ -763,8 +764,8 @@ const styles = StyleSheet.create({
     color: Colors.orangeColor
   },
   icon: {
-    width: 28,
-    height: 28,
+    width: 32,
+    height: 32,
   },
   
 });

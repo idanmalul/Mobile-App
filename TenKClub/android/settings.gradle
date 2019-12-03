@@ -1,4 +1,20 @@
 rootProject.name = 'TenKClub'
+include ':@react-native-community_async-storage'
+project(':@react-native-community_async-storage').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-community/async-storage/android')
+include ':react-native-wheel-pick'
+project(':react-native-wheel-pick').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wheel-pick/android')
+include ':rn-update-apk'
+project(':rn-update-apk').projectDir = new File(rootProject.projectDir, '../node_modules/rn-update-apk/android')
+include ':react-native-file-provider'
+project(':react-native-file-provider').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-file-provider/android')
+include ':react-native-fs'
+project(':react-native-fs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fs/android')
+include ':react-native-appupdate'
+project(':react-native-appupdate').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-appupdate/android')
+include ':react-native-pdf'
+project(':react-native-pdf').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-pdf/android')
+include ':rn-fetch-blob'
+project(':rn-fetch-blob').projectDir = new File(rootProject.projectDir, '../node_modules/rn-fetch-blob/android')
 include ':react-native-firebase'
 project(':react-native-firebase').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-firebase/android')
 include ':react-native-restart'

@@ -13,11 +13,16 @@ error_reporting(E_ALL);
 $d = new \DB();
 $user_id = $argv[1];
 $story_id = $argv[2];
-
-$query = "SELECT s.*,u.username,u.password FROM story s INNER JOIN story_user su ON su.story_id=s.id INNER JOIN users u ON u.user_id=su.user_id WHERE su.user_id='$user_id' AND su.story_id='$story_id'";
+$sent_primary_id = $argv[3];
+//$where = array('user_id'=>$argv[1]); // ,'mobile_no'=>$phone_no
+//$check_user = $d->get_record_where($table='users', $where);
+$query = "SELECT s.*,u.username,u.password,su.campaign_id FROM story s INNER JOIN story_user su ON su.story_id=s.id INNER JOIN users u ON u.user_id=su.user_id WHERE su.user_id='$user_id' AND su.story_id='$story_id' AND su.id='$sent_primary_id'";
 $get_story = $d->query_result($query);
-
+echo '<pre>';
+print_r($argv);
+print_r($get_story);
 if(!empty($get_story)){
+    $campaign_id = $get_story[0]['campaign_id'];
     $username = $get_story[0]['username'];
     $password = base64_decode($get_story[0]['password']);
     $storyFileName = '../uploads/story_images/'.$get_story[0]['story_image'];
@@ -31,7 +36,10 @@ if(!empty($get_story)){
     $media_type = 0;
     $link = '';
 }
-
+//$username = '';
+//$password = '';
+//$username = 'mohan.das.99990';//mohan.das.99990
+//$password = 'xczx';//123qweasdzxc
 $debug = true;
 $truncatedDebug = false;
 //////////////////////
@@ -40,8 +48,12 @@ $truncatedDebug = false;
 //$photoFilename = '../test.jpeg';
 
 //////////////////////
+//\InstagramAPI\Utils::$ffprobeBin = '/domains/10k.tempurl.co.il/ffmpeg/bin/ffprobe';
+//\InstagramAPI\Utils::$ffprobeBin = '/home/rahul/usr/bin/ffprobe';
 
+//\InstagramAPI\Utils::$ffprobeBin = '/home/rahul/ffmpeg/bin/ffprobe';
 $ig = new \InstagramAPI\Instagram($debug, $truncatedDebug);
+//\InstagramAPI\Utils::$ffprobeBin = '/home/rahul/usr/bin/ffprobe';
 try {
     $ig->login($username, $password);
 } catch (\Exception $e) {
@@ -49,6 +61,14 @@ try {
     exit(0);
 }
 
+//$user = new \InstagramAPI\Request\Account;
+//    $tttt=$ig->account->getCurrentUser($user);
+//    echo 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhh';
+//    echo '<br>';
+//    echo '<pre>';
+//    
+//    print_r(GuzzleHttp\json_decode($tttt)->user->pk);die();
+//    echo 'fghhhhhhhhhhhf';
 // You don't have to provide hashtags or locations for your story. It is
 // optional! But we will show you how to do both...
 
@@ -104,7 +124,7 @@ $metadata = [
     'location' => $location,
 */
     // (optional) You can use story links ONLY if you have a business account with >= 10k followers.
-    
+    // 'link' => 'https://github.com/mgp25/Instagram-API',
     'link' => $link,
 ];
 
@@ -116,66 +136,102 @@ try {
     // processing, and it never overwrites your original file.
     //
     // Also note that it has lots of options, so read its class documentation!
-    $getStatus = '';
+    $media_status = '';
+    $getResult = '';
     if($media_type == 1){
         $photo = new \InstagramAPI\Media\Photo\InstagramPhoto($storyFileName, ['targetFeed' => \InstagramAPI\Constants::FEED_STORY]);
-        $getStatus=$ig->story->uploadPhoto($photo->getFile(), $metadata)->getStatus();
+        $getResult=$ig->story->uploadPhoto($photo->getFile(), $metadata)->asStdClass();//->getStatus();
     }elseif($media_type == 2){
         $video = new \InstagramAPI\Media\Video\InstagramVideo($storyFileName, ['targetFeed' => \InstagramAPI\Constants::FEED_STORY]);
-        $getStatus=$ig->story->uploadVideo($video->getFile(), $metadata)->getStatus();
+        $getResult=$ig->story->uploadVideo($video->getFile(), $metadata)->asStdClass();//->getStatus();
     }
     ob_end_clean();
+//    echo '<pre>';
     if($ig->isMaybeLoggedIn == 1 && !empty($ig->session_id)){
-        if($getStatus == 'ok'){
-
-            $data = array('user_id'=>$user_id,
-                          'story_id'=>$story_id,
-                          'post_datetime'=>date('Y-m-d H:i:s'),
-            );
-            $insert_id = $d->insert_records('post_story', $data);
-            if(!empty($insert_id)){
-                $where = array('user_id'=>$user_id,'story_id'=>$story_id);
-                $u_data = array('upload_status'=>1);
-                $d->update_records('story_user', $u_data, $where);
-                
-                /* The checks for the limit which is set by admin */
-                $query = "SELECT count(su.user_id) as accecpted_count FROM story_user su WHERE su.story_id='$story_id' AND upload_status=1";
+        if(!empty($getResult)){
+            $media_taken_at = $getResult->media->taken_at;
+            $media_pk = $getResult->media->pk;
+            $media_id = $getResult->media->id;
+            $media_device_timestamp = $getResult->media->device_timestamp;
+            $media_type = $getResult->media->media_type;
+            $media_upload_id = $getResult->upload_id;
+            $media_status = $getResult->status;
             
-                $story_upload_detail = $d->query_result($query);
+            if($media_status == 'ok'){
+              $current_datetime = date('Y-m-d H:i:s');
+//            $user_id = $check_user[0]['user_id'];
+//            $where = array('user_id'=>$user_id);
+                $data = array('user_id'=>$user_id,
+                              'story_id'=>$story_id,
+                    'campaign_id'=>$campaign_id,
+                              'post_datetime'=>$current_datetime,
+                    // below are the new field added on 09-feb-2019
+                    'media_taken_at'=>$media_taken_at,
+                    'media_pk'=>$media_pk,
+                    'media_id'=>$media_id,
+                    'media_device_timestamp'=>$media_device_timestamp,
+                    'media_type'=>$media_type,
+                    'media_upload_id'=>$media_upload_id,
+                    'media_status'=>$media_status,
+                );
+                $insert_id = $d->insert_records('post_story', $data);
+                if(!empty($insert_id)){
+                    $where = array('user_id'=>$user_id,'story_id'=>$story_id,'id'=>$sent_primary_id);
+                    $u_data = array('upload_status'=>1,
+                        // below are the new field added on 09-feb-2019
+                        'story_uploaded_datetime'=>$current_datetime,
+                        'media_taken_at'=>$media_taken_at,
+                        'media_pk'=>$media_pk,
+                        'media_id'=>$media_id,
+                        'media_device_timestamp'=>$media_device_timestamp,
+                        'media_type'=>$media_type,
+                        'media_upload_id'=>$media_upload_id,
+                        'media_status'=>$media_status,
+                        );
+                    $d->update_records('story_user', $u_data, $where);
 
-                if(!empty($story_upload_detail)){
-                    $no_of_accecpted_count = $story_upload_detail[0]['accecpted_count'];
-                    $query = "SELECT * FROM story WHERE id='$story_id'";
-            
-                    $story_detail = $d->query_result($query);
-                    if(!empty($story_detail)){
-                        $approved_user_limit = $story_detail[0]['approved_user_limit'];
-                        $old_remaining_count = $story_detail[0]['remaining_count'];
-                        if($old_remaining_count!=0 && $old_remaining_count>0){
-                            $new_remaining_count = $approved_user_limit - $no_of_accecpted_count;
-                        }else{
-                            $new_remaining_count = 0;
+                    /* The checks for the limit which is set by admin */
+                    $query = "SELECT count(su.user_id) as accecpted_count FROM story_user su WHERE su.story_id='$story_id' AND upload_status=1";
+
+                    $story_upload_detail = $d->query_result($query);
+    //                echo '<pre>';
+    //                print_r($story_upload_detail);
+                    if(!empty($story_upload_detail)){
+                        $no_of_accecpted_count = $story_upload_detail[0]['accecpted_count'];
+                        $query = "SELECT * FROM story WHERE id='$story_id'";
+
+                        $story_detail = $d->query_result($query);
+                        if(!empty($story_detail)){
+                            $approved_user_limit = $story_detail[0]['approved_user_limit'];//100;200;50
+                            $old_remaining_count = $story_detail[0]['remaining_count'];//100;200;50
+                            if($old_remaining_count!=0 && $old_remaining_count>0){
+                                $new_remaining_count = $approved_user_limit - $no_of_accecpted_count;//98;198;48
+                            }else{
+                                $new_remaining_count = 0;
+                            }
+
+
+                            $where_s = array('id'=>$story_id);
+                            $up_data = array('accepted_count'=>$no_of_accecpted_count,'remaining_count'=>$new_remaining_count);
+                            $d->update_records('story', $up_data, $where_s);
                         }
-                        
-                       
-                        $where_s = array('id'=>$story_id);
-                        $up_data = array('accepted_count'=>$no_of_accecpted_count,'remaining_count'=>$new_remaining_count);
-                        $d->update_records('story', $up_data, $where_s);
+
                     }
-                    
+
+                    $response = array("status"=>$media_status,"success"=>1, "message"=>"Story uploaded successfully!");
+                }else{
+                    $response = array("status"=>$media_status,"success"=>2, "message"=>"Error in insertion");
                 }
-                
-                $response = array("status"=>$getStatus,"success"=>1, "message"=>"Story uploaded successfully!");
-            }else{
-                $response = array("status"=>$getStatus,"success"=>2, "message"=>"Error in insertion");
-            }
             
-        }else{
-            $response = array("status"=>$getStatus,"success"=>2, "message"=>"Failed to upload.Plesae try again.");
+            }else{
+                $response = array("status"=>$media_status,"success"=>2, "message"=>"Failed to upload.Plesae try again.");
+            }
         }
         
+        
+        
         }else{
-            $response = array("status"=>$getStatus,"success"=>2, "message"=>"User not logged In.");
+            $response = array("status"=>$media_status,"success"=>2, "message"=>"User not logged In.");
         }
 
         echo json_encode($response);exit(0);

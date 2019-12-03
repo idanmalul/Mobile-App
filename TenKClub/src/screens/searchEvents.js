@@ -7,7 +7,7 @@ import {
   FlatList,
   Text,
   Dimensions,
-  AsyncStorage,
+  // AsyncStorage,
   View,
   Image,
   TouchableOpacity,
@@ -19,6 +19,7 @@ import {
   BackHandler,
   I18nManager
 } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 I18nManager.forceRTL(true); 
 import { Images, Colors } from "../themes";
 import { getEventList } from "../constants/apis";
@@ -35,7 +36,7 @@ export default class searchEvents extends Component {
     title: '',  // Message
     tabBarIcon: ({ focused, tintColor }) => {
      
-      return <Image style={[styles.icon, { tintColor: tintColor }]} source={require('../images/icons/icon-3.png')}/>;
+      return <Image style={[styles.icon, { tintColor: tintColor }]} source={require('../images/icons/icon5.png')}/>;
     },
 };
   constructor(props) {
